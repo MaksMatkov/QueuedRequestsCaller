@@ -1,17 +1,22 @@
 
 # QueuedRequestsCallerProject
 
-QueuedRequestsCaller is a .NET library that allows you to call requests in a queryable manner with the ability to respond to request data from one request to another. The main class, QueuedRequestsCallerService, takes a list of QueuedRequestItem objects in its constructor.
+QueuedRequestsCaller is a .NET library that allows you to call requests in a queryable manner with the ability to respond to request data from one request to another.
 
 ## Functionality
 
-This project enables you to call requests in a queryable manner. It can also respond to request data from one request to another. The QueuedRequestsCallerService class takes a list of QueuedRequestItem objects as its constructor. Each QueuedRequestItem contains a RequestModel object, which is used to send the request and a list of MapCouple objects, which can be used to map the response from one request to the next.
+- [x] Make HTTP requests.
+- [x] Map data from Body to Header, Header to Query param and etc.
+- [ ] Catch Errors in every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1)
+- [ ] Get logs for every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1)
+
+## Usage
+
+The QueuedRequestsCallerService class takes a list of QueuedRequestItem objects as its constructor. Each QueuedRequestItem contains a RequestModel object, which is used to send the request and a list of MapCouple objects, which can be used to map the response from one request to the next.
 
 The RequestModel object contains the method to use for the request (GET, POST, etc.), the URL of the request, parameters and headers to send with the request. The MapCouple objects can be used to map the response from one request to the parameters and headers of the next request.
 
 The QueuedRequestsCallerService class will then execute the requests in the order they were added to the list and return the response of each request in order.
-
-## Usage
 
 You need to create a list of QueuedRequestItem objects and pass it to the constructor of the QueuedRequestsCallerService. The following example shows how to create a list of QueuedRequestItem objects and pass it to the constructor:
 
