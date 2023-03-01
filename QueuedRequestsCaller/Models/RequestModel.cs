@@ -10,7 +10,7 @@ namespace QueuedRequestsCaller.Models
 {
     public class RequestModel
     {
-        public RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, JObject body) 
+        public RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, JObject body)
             : this(method, resource, queryParameters, headers)
         {
             Body = body;
@@ -30,8 +30,8 @@ namespace QueuedRequestsCaller.Models
             Headers = headers;
         }
 
-        public RestSharp.Method Method { get; set; }
-        public string Resource { get; set; }
+        public RestSharp.Method Method { get; private set; }
+        public string Resource { get; private set; }
         public Dictionary<string, string> QueryParameters { get; set; }
         public Dictionary<string, string> Headers { get; set; }
         public JObject Body { get; set; }
