@@ -12,11 +12,10 @@ namespace QueuedRequestsCaller.Services
     {
         public static RequestModel MappToNext(this QueuedRequestItem currentRequest, RequestModel nextRequest)
         {
-
-            foreach (var mappInfo in currentRequest.mappingList)
+            currentRequest.mappingList.AsParallel().ForAll((mappInfo) =>
             {
                 nextRequest.SetValueByLocation(mappInfo.To, currentRequest.GetValueByLocation(mappInfo.From));
-            }
+            });
 
             return nextRequest;
         }
