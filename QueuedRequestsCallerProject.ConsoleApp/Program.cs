@@ -1,5 +1,7 @@
-﻿using QueuedRequestsCaller;
+﻿using Newtonsoft.Json.Linq;
+using QueuedRequestsCaller;
 using QueuedRequestsCaller.Models;
+using QueuedRequestsCaller.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,7 @@ namespace QueuedRequestsCallerProject.ConsoleApp
                 "https://api.namefake.com/",
                 new Dictionary<string, string>(),
                 new Dictionary<string, string>(), null),
+
                 mappingList = new List<QueuedRequestsCaller.Models.MapCouple>()
                 {
                     new MapCouple()
@@ -35,6 +38,12 @@ namespace QueuedRequestsCallerProject.ConsoleApp
                             location = QueuedRequestsCaller.Enums.MappingValueLocation.QueryParam
                         }
                     }
+                },
+
+                PostRequestActionsList = new List<Action<RequestModel, RequestModel>>()
+                {
+                    LogSomeInfo,
+                    LogSomeInfo
                 }
             });
 
@@ -50,10 +59,6 @@ namespace QueuedRequestsCallerProject.ConsoleApp
 
             var result = caller.MakeRequests();
 
-            result.RequestIteration.SelectMany(el => el.Logs)
-                .ToList()
-                .ForEach(el => Console.WriteLine("Log: " + el.DateTime.ToShortTimeString() + " " + el.Message));
-
             Console.WriteLine("Result Status: " + result.IsSuccessfully);
             if (result.IsSuccessfully)
                 Console.WriteLine("Result: " + result.Response.Content);
@@ -64,5 +69,13 @@ namespace QueuedRequestsCallerProject.ConsoleApp
 
             Console.ReadLine();
         }
+
+        public static void LogSomeInfo(RequestModel current, RequestModel next)
+        {
+            Console.WriteLine("");
+            Console.WriteLine(JObject.Parse(current.RequestResponse.Content));
+            Console.WriteLine("");
+        }
+
     }
 }

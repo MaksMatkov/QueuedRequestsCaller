@@ -38,6 +38,9 @@ namespace QueuedRequestsCaller
                     {
                         newIteration.AddLog(new Log($"Start mapping values to next request, Values Count = [{_settings.RequestsList[i].mappingList.Count}]"));
 
+                        for (var j = 0; j < _settings.RequestsList[i].PostRequestActionsList.Count; j++)
+                            _settings.RequestsList[i].PostRequestActionsList[j](_settings.RequestsList[i].model, _settings.RequestsList[i + 1].model);
+
                         _settings.RequestsList[i].MappToNext(_settings.RequestsList[i + 1].model);
                         
                         newIteration.AddLog(new Log($"End mapping values to next request"));

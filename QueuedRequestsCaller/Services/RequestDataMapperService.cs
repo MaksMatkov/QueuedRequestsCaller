@@ -15,7 +15,14 @@ namespace QueuedRequestsCaller.Services
         {
             currentRequest.mappingList.AsParallel().ForAll((mappInfo) =>
             {
-                nextRequest.SetValueByLocation(mappInfo.To, currentRequest.GetValueByLocation(mappInfo.From));
+                try
+                {
+                    nextRequest.SetValueByLocation(mappInfo.To, currentRequest.GetValueByLocation(mappInfo.From));
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error during mapping MappInfo = [{JObject.FromObject(mappInfo)}]", ex);
+                }
             });
 
             return nextRequest;
