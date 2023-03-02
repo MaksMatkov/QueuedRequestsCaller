@@ -10,14 +10,14 @@ namespace QueuedRequestsCaller.Services
 {
     public static class JObjectMapperService
     {
-		public static JObject MapValues(JObject one, JObject two, List<MapCouple> couples)
-		{
-			foreach (var c in couples)
-			{
+        public static JObject MapValues(JObject one, JObject two, List<MapCouple> couples)
+        {
+            foreach (var c in couples)
+            {
                 CopyFieldValue(two, c.To.FullName, ExtractField(one, c.From.FullName));
-			}
-			return two;
-		}
+            }
+            return two;
+        }
 
         public static void CopyFieldValue(JObject jObject, string fieldName, object newValue)
         {

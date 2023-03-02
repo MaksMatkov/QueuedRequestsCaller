@@ -13,9 +13,16 @@ namespace QueuedRequestsCaller.Services
     {
         public static RequestModel MappToNext(this QueuedRequestItem currentRequest, RequestModel nextRequest)
         {
-            currentRequest.mappingList.AsParallel().ForAll((mappInfo) =>
+            currentRequest.MappingList.AsParallel().ForAll((mappInfo) =>
             {
-                nextRequest.SetValueByLocation(mappInfo.To, currentRequest.GetValueByLocation(mappInfo.From));
+                try
+                {
+                    nextRequest.SetValueByLocation(mappInfo.To, currentRequest.GetValueByLocation(mappInfo.From));
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error during mapping MappInfo = [{JObject.FromObject(mappInfo)}]", ex);
+                }
             });
 
             return nextRequest;
@@ -23,14 +30,14 @@ namespace QueuedRequestsCaller.Services
 
         public static object GetValueByLocation(this QueuedRequestItem currentRequest, RequestValue value)
         {
-            switch (value.location)
+            switch (value.Location)
             {
                 case Enums.MappingValueLocation.Body:
-                    return JObjectMapperService.ExtractField(JObject.Parse(currentRequest.model.RequestResponse.Content), value.FullName);
+                    return JObjectMapperService.ExtractField(JObject.Parse(currentRequest.Model.RequestResponse.Content), value.FullName);
                 case Enums.MappingValueLocation.Header:
-                    return currentRequest.model.RequestResponse.Headers.FirstOrDefault(el => el.Name == value.FullName);
+                    return currentRequest.Model.RequestResponse.Headers.FirstOrDefault(el => el.Name == value.FullName);
                 case Enums.MappingValueLocation.QueryParam:
-                    var queryDictionary = System.Web.HttpUtility.ParseQueryString(currentRequest.model.RequestResponse.ResponseUri.Query);
+                    var queryDictionary = System.Web.HttpUtility.ParseQueryString(currentRequest.Model.RequestResponse.ResponseUri.Query);
                     return queryDictionary.Get(value.FullName);
             }
 
@@ -39,7 +46,7 @@ namespace QueuedRequestsCaller.Services
 
         public static bool SetValueByLocation(this RequestModel nextRequest, RequestValue value, object newValue)
         {
-            switch (value.location)
+            switch (value.Location)
             {
                 case Enums.MappingValueLocation.Body:
                     JObjectMapperService.CopyFieldValue(nextRequest.RequestBody, value.FullName, newValue);

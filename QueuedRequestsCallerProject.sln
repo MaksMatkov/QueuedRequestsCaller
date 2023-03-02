@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.33214.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueuedRequestsCallerProject.ConsoleApp", "QueuedRequestsCallerProject.ConsoleApp\QueuedRequestsCallerProject.ConsoleApp.csproj", "{5687CD7D-9B66-43DE-B2D5-E838F3713DC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueuedRequestsCallerProject.ConsoleApp", "QueuedRequestsCallerProject.ConsoleApp\QueuedRequestsCallerProject.ConsoleApp.csproj", "{5687CD7D-9B66-43DE-B2D5-E838F3713DC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueuedRequestsCaller", "QueuedRequestsCaller\QueuedRequestsCaller.csproj", "{0D5E9295-88B4-401C-82AA-8AF3E57E3CA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueuedRequestsCaller", "QueuedRequestsCaller\QueuedRequestsCaller.csproj", "{0D5E9295-88B4-401C-82AA-8AF3E57E3CA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueuedRequestsCallerTests", "QueuedRequestsCallerTests\QueuedRequestsCallerTests.csproj", "{CFBCA11F-C712-4ECB-B0B0-7BADACD7E782}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{0D5E9295-88B4-401C-82AA-8AF3E57E3CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D5E9295-88B4-401C-82AA-8AF3E57E3CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D5E9295-88B4-401C-82AA-8AF3E57E3CA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFBCA11F-C712-4ECB-B0B0-7BADACD7E782}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFBCA11F-C712-4ECB-B0B0-7BADACD7E782}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFBCA11F-C712-4ECB-B0B0-7BADACD7E782}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFBCA11F-C712-4ECB-B0B0-7BADACD7E782}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
