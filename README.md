@@ -7,8 +7,11 @@ QueuedRequestsCaller is a .NET library that allows you to call requests in a que
 
 - [x] Make HTTP requests.
 - [x] Map data from Body to Header, Header to Query param and etc.
-- [ ] Catch Errors in every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1)
-- [ ] Get logs for every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1)
+- [x] Catch Errors in every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1)
+- [x] Get logs for every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1)
+- [x] Unit Tests. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/3)
+- [x] Post request actions. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/2)
+- [ ] Markup parser for generating Requests List. 
 
 ## Usage
 
@@ -21,56 +24,78 @@ The QueuedRequestsCallerService class will then execute the requests in the orde
 You need to create a list of QueuedRequestItem objects and pass it to the constructor of the QueuedRequestsCallerService. The following example shows how to create a list of QueuedRequestItem objects and pass it to the constructor:
 
 ```C#
-// create a new list of QueuedRequestItem objects
-var callsList = new System.Collections.Generic.List<QueuedRequestsCaller.Models.QueuedRequestItem>();
-
-// add a new QueuedRequestItem object to the list
-callsList.Add(new QueuedRequestsCaller.Models.QueuedRequestItem() { 
-    // create a new RequestModel object and set its properties
-    model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
-    "https://api.namefake.com/", 
-    new Dictionary<string, string>(),
-    new Dictionary<string, string>(), null),
-    // create a new list of MapCouple objects and set its properties
-    mappingList = new List<QueuedRequestsCaller.Models.MapCouple>()
-    {
-        // create a new MapCouple object and set its properties
-        new MapCouple()
+ static void Main(string[] args)
         {
-            // set the From property to a new RequestValue object
-            From = new RequestValue()
+            Console.WriteLine("Start");
+
+// Create a list of QueuedRequestItem objects, each containing a request model, mapping list, and post-request actions list
+            var callsList = new System.Collections.Generic.List<QueuedRequestsCaller.Models.QueuedRequestItem>();
+
+// Add a request to the namefake API with a mapping from the response body to a query parameter, and two post-request actions to log some information
+            callsList.Add(new QueuedRequestsCaller.Models.QueuedRequestItem()
             {
-                FullName = "name",
-                location = QueuedRequestsCaller.Enums.MappingValueLocation.Body
-            },
-            // set the To property to a new RequestValue object
-            To = new RequestValue()
+                Model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
+                "https://api.namefake.com/",
+                new Dictionary<string, string>(),
+                new Dictionary<string, string>(), null),
+
+                MappingList = new List<QueuedRequestsCaller.Models.MapCouple>()
+                {
+                    new MapCouple()
+                    {
+                        From = new RequestValue()
+                        {
+                            FullName = "name",
+                            Location = QueuedRequestsCaller.Enums.MappingValueLocation.Body
+                        },
+                        To = new RequestValue()
+                        {
+                            FullName = "name",
+                            Location = QueuedRequestsCaller.Enums.MappingValueLocation.QueryParam
+                        }
+                    }
+                },
+
+                PostRequestActionsList = new List<Action<RequestModel, RequestModel>>()
+                {
+                    LogSomeInfo,
+                    LogSomeInfo
+                }
+            });
+
+            callsList.Add(new QueuedRequestsCaller.Models.QueuedRequestItem()
             {
-                FullName = "name",
-                location = QueuedRequestsCaller.Enums.MappingValueLocation.QueryParam
-            }
+                Model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
+               "https://api.nationalize.io/",
+               new Dictionary<string, string>(),
+               new Dictionary<string, string>(), null)
+            });
+
+// Create a QueuedRequestsCallerService instance with the callsList as a parameter
+            QueuedRequestsCallerService caller = new QueuedRequestsCallerService(new QueuedRequestsCallerSettings() { RequestsList = callsList });
+
+// Call MakeRequests method of QueuedRequestsCallerService to execute all requests sequentially
+            var result = caller.MakeRequests();
+
+// Print the result status and response content or last exception message
+            Console.WriteLine("Result Status: " + result.IsSuccessfully);
+            if (result.IsSuccessfully)
+                Console.WriteLine("Result: " + result.Response.Content);
+            else
+                Console.Write(result.LastException);
+
+            Console.WriteLine("Finish");
+
+            Console.ReadLine();
         }
-    }
-});
 
-// add another QueuedRequestItem object to the list
-callsList.Add(new QueuedRequestsCaller.Models.QueuedRequestItem()
-{
-    // create a new RequestModel object and set its properties
-    model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
-   "https://api.nationalize.io/",
-   new Dictionary<string, string>(),
-   new Dictionary<string, string>(), null)
-});
-
-// create a new QueuedRequestsCallerService object with the list of QueuedRequestItem objects
-QueuedRequestsCallerService caller = new QueuedRequestsCallerService(callsList);
-
-// make the requests and store the response
-var response = caller.MakeRequests();
-
-// print the content of the response to the console
-Console.WriteLine(response.Content);
+// A method to log some information about the current request
+        public static void LogSomeInfo(RequestModel current, RequestModel next)
+        {
+            Console.WriteLine("");
+            Console.WriteLine(JObject.Parse(current.RequestResponse.Content));
+            Console.WriteLine("");
+        }
 ```
 
 Once you have created the list of QueuedRequestItem objects, you can call the MakeRequests method of the QueuedRequestsCallerService to execute the requests in the order they were added. The Execute method will return a list of responses in the order they were called.
