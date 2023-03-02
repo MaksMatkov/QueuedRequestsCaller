@@ -18,24 +18,24 @@ namespace QueuedRequestsCallerProject.ConsoleApp
 
             callsList.Add(new QueuedRequestsCaller.Models.QueuedRequestItem()
             {
-                model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
+                Model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
                 "https://api.namefake.com/",
                 new Dictionary<string, string>(),
                 new Dictionary<string, string>(), null),
 
-                mappingList = new List<QueuedRequestsCaller.Models.MapCouple>()
+                MappingList = new List<QueuedRequestsCaller.Models.MapCouple>()
                 {
                     new MapCouple()
                     {
                         From = new RequestValue()
                         {
                             FullName = "name",
-                            location = QueuedRequestsCaller.Enums.MappingValueLocation.Body
+                            Location = QueuedRequestsCaller.Enums.MappingValueLocation.Body
                         },
                         To = new RequestValue()
                         {
                             FullName = "name",
-                            location = QueuedRequestsCaller.Enums.MappingValueLocation.QueryParam
+                            Location = QueuedRequestsCaller.Enums.MappingValueLocation.QueryParam
                         }
                     }
                 },
@@ -49,7 +49,7 @@ namespace QueuedRequestsCallerProject.ConsoleApp
 
             callsList.Add(new QueuedRequestsCaller.Models.QueuedRequestItem()
             {
-                model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
+                Model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
                "https://api.nationalize.io/",
                new Dictionary<string, string>(),
                new Dictionary<string, string>(), null)

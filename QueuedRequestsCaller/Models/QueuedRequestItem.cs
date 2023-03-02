@@ -9,8 +9,8 @@ namespace QueuedRequestsCaller.Models
 {
     public class QueuedRequestItem
     {
-        public RequestModel model { get; set; }
-        public List<MapCouple> mappingList { get; set; } = new List<MapCouple>();
+        public RequestModel Model { get; set; }
+        public List<MapCouple> MappingList { get; set; } = new List<MapCouple>();
 
         /// <summary>
         /// Actions that take first argument this request and second parameter as next request

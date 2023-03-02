@@ -20,7 +20,8 @@ namespace QueuedRequestsCaller.Models
         public Exception LastException { get; private set; }
         public List<RequestIteration> RequestIteration { get; private set; }
 
-        public RestResponse Response {
+        public RestResponse Response
+        {
             get
             {
                 if (RequestIteration.Count > 0)

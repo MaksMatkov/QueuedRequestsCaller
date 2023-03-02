@@ -9,7 +9,7 @@ namespace QueuedRequestsCaller.Models
 {
     public class RequestValue
     {
-        public MappingValueLocation location { get; set; }
+        public MappingValueLocation Location { get; set; }
         /// <summary>
         /// Name or path to value location
         /// </summary>
