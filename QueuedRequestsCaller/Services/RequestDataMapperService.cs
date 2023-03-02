@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RestSharp;
 using System.Threading.Tasks;
 
 namespace QueuedRequestsCaller.Services
@@ -41,13 +42,13 @@ namespace QueuedRequestsCaller.Services
             switch (value.location)
             {
                 case Enums.MappingValueLocation.Body:
-                    JObjectMapperService.CopyFieldValue(nextRequest.Body, value.FullName, newValue);
+                    JObjectMapperService.CopyFieldValue(nextRequest.RequestBody, value.FullName, newValue);
                     break;
                 case Enums.MappingValueLocation.Header:
-                    nextRequest.Headers[value.FullName] = (string)newValue;
+                    nextRequest.RestRequest.AddOrUpdateHeader(value.FullName, (string)newValue);
                     break;
                 case Enums.MappingValueLocation.QueryParam:
-                    nextRequest.QueryParameters[value.FullName] = (string)newValue;
+                    nextRequest.RestRequest.AddOrUpdateParameter(value.FullName, (string)newValue);
                     break;
             }
 

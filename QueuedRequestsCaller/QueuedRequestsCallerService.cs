@@ -23,31 +23,33 @@ namespace QueuedRequestsCaller
             if (!_settings.RequestsList.Any())
                 return null;
 
-            RestResponse responsePointer = new RestResponse();
             var _requestIteration = new List<RequestIteration>();
 
-            foreach (var req in _settings.RequestsList)
+            for(var i = 0; i < _settings.RequestsList.Count; i++)
             {
-                var newIteration = new RequestIteration(req.model);
+                var newIteration = new RequestIteration(_settings.RequestsList[i].model);
                 try
                 {
-                    newIteration.AddLog(new Log($"Start execute request with endpoint = [{newIteration.RequestModel.Resource}]"));
-                    req.model.MakeRequest();
-                    if (_settings.RequestsList.IndexOf(req) != _settings.RequestsList.Count - 1)
+                    newIteration.AddLog(new Log($"Start execute request with endpoint = [{newIteration.RequestModel.RestRequest.Resource}]"));
+
+                    _settings.RequestsList[i].model.MakeRequest();
+
+                    if (i + 1 < _settings.RequestsList.Count)
                     {
-                        newIteration.AddLog(new Log($"Start mapping values to next request, Values Count = [{req.mappingList.Count}]"));
-                        req.MappToNext(_settings.RequestsList[_settings.RequestsList.IndexOf(req) + 1].model);
+                        newIteration.AddLog(new Log($"Start mapping values to next request, Values Count = [{_settings.RequestsList[i].mappingList.Count}]"));
+
+                        _settings.RequestsList[i].MappToNext(_settings.RequestsList[i + 1].model);
+                        
                         newIteration.AddLog(new Log($"End mapping values to next request"));
                     }
-
-                    responsePointer = req.model.RequestResponse;
                     
-                    newIteration.AddLog(new Log($"End execute request with endpoint = [{newIteration.RequestModel.Resource}]"));
+                    newIteration.AddLog(new Log($"End execute request with endpoint = [{newIteration.RequestModel.RestRequest.Resource}]"));
+                    
                     _requestIteration.Add(newIteration);
                 }
                 catch(Exception ex)
                 {
-                    newIteration.AddLog(new Log($"Error: Request endpoint = [{newIteration.RequestModel.Resource}], Message = [{ex.Message}]", Enums.RequestLogType.Error, ex));
+                    newIteration.AddLog(new Log($"Error: Request endpoint = [{newIteration.RequestModel.RestRequest.Resource}], Message = [{ex.Message}]", Enums.RequestLogType.Error, ex));
                     return new RequestsCallerResult(false, _requestIteration, ex);
                 }
             }

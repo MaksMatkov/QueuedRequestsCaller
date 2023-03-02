@@ -13,58 +13,62 @@ namespace QueuedRequestsCaller.Models
         public RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, JObject body)
             : this(method, resource, queryParameters, headers)
         {
-            Body = body;
+            if(body != null)
+                this.RestRequest.AddJsonBody(body);
         }
 
         public RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, object body)
             : this(method, resource, queryParameters, headers)
         {
-            Body = JObject.FromObject(body);
+            this.RestRequest.AddJsonBody(JObject.FromObject(body));
         }
 
         private RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headers)
         {
-            Method = method;
-            Resource = resource;
-            QueryParameters = queryParameters;
-            Headers = headers;
-        }
+            this.RestRequest.Resource = resource;
+            this.RestRequest.Method = method;
 
-        public RestSharp.Method Method { get; private set; }
-        public string Resource { get; private set; }
-        public Dictionary<string, string> QueryParameters { get; set; }
-        public Dictionary<string, string> Headers { get; set; }
-        public JObject Body { get; set; }
-        public RestResponse RequestResponse { get; private set; }
-
-        public RestResponse MakeRequest()
-        {
             var tasksList = new Task[2];
-            var client = new RestClient();
-            var request = new RestRequest(Resource, Method);
-
-            //add headers and body
             tasksList[0] = (Task.Run(() => {
-                foreach (var h in Headers)
+                foreach (var h in headers)
                 {
-                    request.AddHeader(h.Key, h.Value);
+                    this.RestRequest.AddHeader(h.Key, h.Value);
                 }
-
-                if (Body != null)
-                    request.AddJsonBody(Body);
             }));
 
-            //add query params
             tasksList[1] = (Task.Run(() => {
-                foreach (var h in QueryParameters)
+                foreach (var h in queryParameters)
                 {
-                    request.AddQueryParameter(h.Key, h.Value);
+                    this.RestRequest.AddQueryParameter(h.Key, h.Value);
                 }
             }));
 
             Task.WaitAll(tasksList);
+        }
 
-            RequestResponse = client.Execute(request);
+        private JObject _RequestBody { get; set; }
+        public JObject RequestBody
+        {
+            get
+            {
+                return _RequestBody;
+            }
+
+            set
+            {
+                _RequestBody = value;
+                RestRequest.AddJsonBody("");
+                RestRequest.AddJsonBody(value);
+            }
+        }
+        public RestRequest RestRequest { get; private set; } = new RestRequest();
+        public RestResponse RequestResponse { get; private set; }
+
+        public RestResponse MakeRequest()
+        {
+            var client = new RestClient();
+
+            RequestResponse = client.Execute(this.RestRequest);
 
             return RequestResponse;
         }
