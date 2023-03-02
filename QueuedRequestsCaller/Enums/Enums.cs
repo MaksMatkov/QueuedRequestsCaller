@@ -12,4 +12,10 @@ namespace QueuedRequestsCaller.Enums
         Header,
         QueryParam
     }
+
+    public enum RequestLogType
+    {
+        Error,
+        Info
+    }
 }

@@ -10,6 +10,6 @@ namespace QueuedRequestsCaller.Models
     public class QueuedRequestItem
     {
         public RequestModel model { get; set; }
-        public List<MapCouple> mappingList { get; set; }
+        public List<MapCouple> mappingList { get; set; } = new List<MapCouple>();
     }
 }

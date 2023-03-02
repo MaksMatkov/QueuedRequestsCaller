@@ -2,6 +2,7 @@
 using QueuedRequestsCaller.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QueuedRequestsCallerProject.ConsoleApp
 {
@@ -13,9 +14,10 @@ namespace QueuedRequestsCallerProject.ConsoleApp
 
             var callsList = new System.Collections.Generic.List<QueuedRequestsCaller.Models.QueuedRequestItem>();
 
-            callsList.Add(new QueuedRequestsCaller.Models.QueuedRequestItem() { 
+            callsList.Add(new QueuedRequestsCaller.Models.QueuedRequestItem()
+            {
                 model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
-                "https://api.namefake.com/", 
+                "https://api.namefake.com/",
                 new Dictionary<string, string>(),
                 new Dictionary<string, string>(), null),
                 mappingList = new List<QueuedRequestsCaller.Models.MapCouple>()
@@ -44,11 +46,19 @@ namespace QueuedRequestsCallerProject.ConsoleApp
                new Dictionary<string, string>(), null)
             });
 
-            QueuedRequestsCallerService caller = new QueuedRequestsCallerService(callsList);
+            QueuedRequestsCallerService caller = new QueuedRequestsCallerService(new QueuedRequestsCallerSettings() { RequestsList = callsList });
 
-            var response = caller.MakeRequests();
+            var result = caller.MakeRequests();
 
-            Console.WriteLine(response.Content);
+            result.RequestIteration.SelectMany(el => el.Logs)
+                .ToList()
+                .ForEach(el => Console.WriteLine("Log: " + el.DateTime.ToShortTimeString() + " " + el.Message));
+
+            Console.WriteLine("Result Status: " + result.IsSuccessfully);
+            if (result.IsSuccessfully)
+                Console.WriteLine("Result: " + result.Response.Content);
+            else
+                Console.Write(result.LastException);
 
             Console.WriteLine("Finish");
 

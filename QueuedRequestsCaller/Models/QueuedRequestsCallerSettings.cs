@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace QueuedRequestsCaller.Models
 {
-    public class MapCouple
+    public class QueuedRequestsCallerSettings
     {
-        public RequestValue From { get; set; }
-        public RequestValue To { get; set; }
+        public List<QueuedRequestItem> RequestsList { get; set; }
     }
 }
