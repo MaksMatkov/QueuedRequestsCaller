@@ -8,11 +8,11 @@ QueuedRequestsCaller is a .NET library that allows you to call requests in a que
 
 - [x] :mailbox_with_mail: Make HTTP requests.
 - [x] :football: Map data from Body to Header, Header to Query param and etc.
-- [x] :horse_racing: Catch Errors in every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1) 
-- [x] :chart_with_upwards_trend: Get logs for every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1) 
-- [x] :triangular_ruler: Unit Tests. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/3)
-- [x] :golf: Post request callbacks. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/2) 
-- [ ] :calling: Markup parser for generating Requests List. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/6) 
+- [x] :horse_racing: Catch Errors in every iteration. [QRC-1](https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1) 
+- [x] :chart_with_upwards_trend: Get logs for every iteration. [QRC-1](https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1) 
+- [x] :triangular_ruler: Unit Tests. [QRC-3](https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/3)
+- [x] :golf: Post request callbacks. [QRC-2](https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/2) 
+- [ ] :calling: Markup parser for generating Requests List. [QRC-6](https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/6) 
 - [ ] :mortar_board: Wiki.
 
 ## Usage
