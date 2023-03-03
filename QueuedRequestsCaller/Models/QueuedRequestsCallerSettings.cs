@@ -9,5 +9,6 @@ namespace QueuedRequestsCaller.Models
     public class QueuedRequestsCallerSettings
     {
         public List<QueuedRequestItem> RequestsList { get; set; } = new List<QueuedRequestItem>();
+        public bool DropOnReExecuteError { get; set; } = false;
     }
 }

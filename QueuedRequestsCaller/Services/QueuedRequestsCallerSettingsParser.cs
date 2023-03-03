@@ -47,6 +47,8 @@ namespace QueuedRequestsCaller.Services
                 foreach (var request in requestsList)
                 {
                     var model = request.SelectToken("Model");
+                    var callsCount = request.SelectToken("CallsCount") != null ? request.SelectToken("CallsCount").Value<int>() : 1;
+
                     var mappingList = request.SelectToken("MappingList") != null ? 
                         JsonConvert.DeserializeObject<List<MapCouple>>(request.SelectToken("MappingList")?.ToString())
                         : new List<MapCouple>();
@@ -60,7 +62,8 @@ namespace QueuedRequestsCaller.Services
                     result.RequestsList.Add(new QueuedRequestItem()
                     {
                         MappingList = mappingList,
-                        Model = new RequestModel(method, resource, queryParams, headerValues, body)
+                        Model = new RequestModel(method, resource, body, queryParams, headerValues),
+                        CallsCount = callsCount > 0 ? callsCount : 1
                     });
                 }
             }
@@ -184,6 +187,9 @@ namespace QueuedRequestsCaller.Services
                 ]
               }
             }
+          },
+          ""CallsCount"": {
+                ""type"": ""integer""
           },
           ""required"": [
             ""RequestsList""

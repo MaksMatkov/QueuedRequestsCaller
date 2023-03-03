@@ -10,14 +10,14 @@ namespace QueuedRequestsCaller.Models
 {
     public class RequestModel
     {
-        public RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headerValues, string body)
+        public RequestModel(RestSharp.Method method, string resource, string body, Dictionary<string, string> queryParameters = null, Dictionary<string, string> headerValues = null)
             : this(method, resource, queryParameters, headerValues)
         {
             if (body != null)
                 this.RequestBody = JObject.Parse(body);
         }
 
-        public RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headerValues, object body)
+        public RequestModel(RestSharp.Method method, string resource, object body, Dictionary<string, string> queryParameters = null, Dictionary<string, string> headerValues = null)
             : this(method, resource, queryParameters, headerValues)
         {
             if (body != null)
