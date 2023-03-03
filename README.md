@@ -1,19 +1,19 @@
 <img src="logo.png" alt= “” width="300">
 
-# QueuedRequestsCallerProject
+# :bell:QueuedRequestsCaller - manage and execute your API requests
 
-QueuedRequestsCaller is a .NET library that allows you to call requests in a queryable manner with the ability to respond to request data from one request to another.
+QueuedRequestsCaller is a .NET library that allows you to call requests in a queryable manner with the ability to :star2::grey_exclamation:respond to request data from one request to another.:star2::grey_exclamation:
 
 ## Functionality
 
-- [x] Make HTTP requests.
-- [x] Map data from Body to Header, Header to Query param and etc.
-- [x] Catch Errors in every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1)
-- [x] Get logs for every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1)
-- [x] Unit Tests. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/3)
-- [x] Post request actions. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/2)
-- [ ] Markup parser for generating Requests List. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/6) 
-- [ ] Wiki.
+- [x] :mailbox_with_mail: Make HTTP requests.
+- [x] :football: Map data from Body to Header, Header to Query param and etc.
+- [x] :horse_racing: Catch Errors in every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1) 
+- [x] :chart_with_upwards_trend: Get logs for every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1) 
+- [x] :triangular_ruler: Unit Tests. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/3)
+- [x] :golf: Post request callbacks. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/2) 
+- [ ] :calling: Markup parser for generating Requests List. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/6) 
+- [ ] :mortar_board: Wiki.
 
 ## Usage
 
@@ -102,6 +102,34 @@ static void Main(string[] args)
 
 Once you have created the list of QueuedRequestItem objects, you can call the MakeRequests method of the QueuedRequestsCallerService to execute the requests in the order they were added. The Execute method will return a list of responses in the order they were called.
 
+### :bulb: Use JSON for prepare requests faster
+
+You have the ability to use JSON data to create an input list of requests with mapped data, which is a better approach for using dynamic requests. Additionally, you can save JSON as a reusable template, which can greatly improve your workflow efficiency.
+
+```C#
+public static void MakeRequestFromJson()
+{
+    // Read the contents of the "data.json" file into a string variable.
+    var json = File.ReadAllText("data.json");
+
+    // Create a QueuedRequestsCallerService instance with the parsed JSON data and the default settings.
+    QueuedRequestsCallerService caller = new QueuedRequestsCallerService(json, new QueuedRequestsCallerSettingsParser());
+
+    // Call the MakeRequests method to send the queued requests and get the results.
+    var result = caller.MakeRequests();
+}
+```
+
 ## Building the Project
 
 To build the project, you need .NET Core 3.1 or later. Once you have .NET Core installed, you can simply run `dotnet build` from the root of the project to build the project. After the build is complete, you can run the tests by running `dotnet test` from the root of the project.
+
+## Credits
+
+This project is built using the following open-source libraries:
+
+- [Newtonsoft.Json.Schema](https://github.com/JamesNK/Newtonsoft.Json.Schema)
+- [Remote.Linq.Newtonsoft](https://github.com/6bee/Remote.Linq)
+- [RestSharp](https://github.com/restsharp/RestSharp)
+
+We would like to thank the contributors of these projects for their amazing work.
