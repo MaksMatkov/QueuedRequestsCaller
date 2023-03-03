@@ -6,6 +6,7 @@ using RestSharp;
 using System.Threading.Tasks;
 using QueuedRequestsCaller.Services;
 using System.Linq;
+using QueuedRequestsCaller.Infrastructure;
 
 namespace QueuedRequestsCaller
 {
@@ -13,14 +14,39 @@ namespace QueuedRequestsCaller
     {
         private QueuedRequestsCallerSettings _callerSettings { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QueuedRequestsCallerService"/> class.
+        /// </summary>
+        /// <param name="callerSettings"><see cref="QueuedRequestsCallerService"/> settings</param>
         public QueuedRequestsCallerService(QueuedRequestsCallerSettings callerSettings)
         {
             this._callerSettings = callerSettings;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QueuedRequestsCallerService"/> class. That take json string with <see cref="IQueuedRequestsCallerSettingsParser"/>.
+        /// <para>Use for implement dynamic request caller settings editing</para>
+        /// </summary>
+        /// <param name="json"><see cref="QueuedRequestsCallerSettings"/> as JSON string</param>
+        /// <param name="parce"><see cref="IQueuedRequestsCallerSettingsParser"/> </param>
+        public QueuedRequestsCallerService(string json, IQueuedRequestsCallerSettingsParser parce)
+        {
+            if (parce == null)
+                throw new NullReferenceException($"{typeof(IQueuedRequestsCallerSettingsParser).FullName} is NULL");
+
+            this._callerSettings = parce.Parse(json);
+        }
+
+        /// <summary>
+        /// Makes requests according to the queued request settings.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="RequestsCallerResult"/> object containing the result of the requests, 
+        /// or null if <see cref="QueuedRequestsCallerSettings"/> is null or <see cref="QueuedRequestsCallerSettings.RequestsList"/> is empty or null.
+        /// </returns>
         public RequestsCallerResult MakeRequests()
         {
-            if (!_callerSettings.RequestsList.Any())
+            if (_callerSettings == null || !(_callerSettings.RequestsList != null && _callerSettings.RequestsList.Any()))
                 return null;
 
             var _requestIteration = new List<RequestIteration>();
