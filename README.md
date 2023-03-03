@@ -8,11 +8,14 @@ QueuedRequestsCaller is a .NET library that allows you to call requests in a que
 
 - [x] :mailbox_with_mail: Make HTTP requests.
 - [x] :football: Map data from Body to Header, Header to Query param and etc.
+- [ ] :page_facing_up: Save respones data in ine global data store for reusing in next requests. [QRC-6](https://github.com/MaksMatkov/QueuedRequestsCaller/issues/10)
 - [x] :horse_racing: Catch Errors in every iteration. [QRC-1](https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1) 
 - [x] :chart_with_upwards_trend: Get logs for every iteration. [QRC-1](https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1) 
 - [x] :triangular_ruler: Unit Tests. [QRC-3](https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/3)
+- [x] :repeat: Request re-calls. [QRC-5](https://github.com/MaksMatkov/QueuedRequestsCaller/issues/9) 
 - [x] :golf: Post request callbacks. [QRC-2](https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/2) 
 - [ ] :calling: Markup parser for generating Requests List. [QRC-6](https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/6) 
+- [ ] :negative_squared_cross_mark: Checking expected and breakables response http statuses. [QRC-7](https://github.com/MaksMatkov/QueuedRequestsCaller/issues/11)
 - [ ] :mortar_board: Wiki.
 
 ## Usage
