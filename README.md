@@ -1,4 +1,5 @@
-![logo](logo.png)
+<img src="logo.png" alt= “” width="300">
+
 # QueuedRequestsCallerProject
 
 QueuedRequestsCaller is a .NET library that allows you to call requests in a queryable manner with the ability to respond to request data from one request to another.
@@ -11,7 +12,8 @@ QueuedRequestsCaller is a .NET library that allows you to call requests in a que
 - [x] Get logs for every iteration. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/1)
 - [x] Unit Tests. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/3)
 - [x] Post request actions. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/2)
-- [ ] Markup parser for generating Requests List. 
+- [ ] Markup parser for generating Requests List. (https://github.com/MaksMatkov/QueuedRequestsCallerProject/issues/6) 
+- [ ] Wiki.
 
 ## Usage
 
