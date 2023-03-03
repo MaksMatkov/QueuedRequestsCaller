@@ -17,4 +17,10 @@
     <ProjectReference Include="..\QueuedRequestsCaller\QueuedRequestsCaller.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestJSONData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

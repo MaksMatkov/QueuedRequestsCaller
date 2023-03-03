@@ -10,6 +10,8 @@ namespace QueuedRequestsCallerProject.ConsoleApp
 {
     class Program
     {
+        public static string Value { get; set; }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Start");
@@ -78,6 +80,7 @@ namespace QueuedRequestsCallerProject.ConsoleApp
         // A method to log some information about the current request
         public static void LogSomeInfo(RequestModel current, RequestModel next)
         {
+            Value = current.RequestResponse.Content;
             Console.WriteLine("");
             Console.WriteLine(JObject.Parse(current.RequestResponse.Content));
             Console.WriteLine("");
