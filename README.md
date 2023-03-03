@@ -2,7 +2,7 @@
 
 # :bell:QueuedRequestsCaller - manage and execute your API requests
 
-QueuedRequestsCaller is a .NET library that allows you to call requests in a queryable manner with the ability to :star2::grey_exclamation:respond to request data from one request to another.:star2::grey_exclamation:
+QueuedRequestsCaller is a .NET library that allows you to call requests in a queryable manner with the ability to :star2::grey_exclamation:transfer request data from one to another.:star2::grey_exclamation:
 
 ## Functionality
 
