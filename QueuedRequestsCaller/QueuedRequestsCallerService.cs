@@ -28,13 +28,14 @@ namespace QueuedRequestsCaller
         /// <para>Use for implement dynamic request caller settings editing</para>
         /// </summary>
         /// <param name="json"><see cref="QueuedRequestsCallerSettings"/> as JSON string</param>
-        /// <param name="parce"><see cref="IQueuedRequestsCallerSettingsParser"/> </param>
-        public QueuedRequestsCallerService(string json, IQueuedRequestsCallerSettingsParser parce)
+        /// <param name="parce"><see cref="IQueuedRequestsCallerSettingsParser"/></param>
+        /// <param name="needValidate">if need validate parsed json before parse, if false can improve execution speed</param>
+        public QueuedRequestsCallerService(string json, IQueuedRequestsCallerSettingsParser parce, bool needValidate = true)
         {
             if (parce == null)
                 throw new NullReferenceException($"{typeof(IQueuedRequestsCallerSettingsParser).FullName} is NULL");
 
-            this._callerSettings = parce.Parse(json);
+            this._callerSettings = parce.Parse(json, needValidate);
         }
 
         /// <summary>
