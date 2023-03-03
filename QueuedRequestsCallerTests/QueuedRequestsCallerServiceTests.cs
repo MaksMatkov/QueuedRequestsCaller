@@ -136,6 +136,7 @@ namespace QueuedRequestsCaller.Tests
             Assert.AreEqual((JObject.Parse(result.RequestIteration[0].RequestModel.RequestResponse.Content) as dynamic).name, (JObject.Parse(result.Response.Content) as dynamic).name);
         }
 
+        [TestMethod()]
         public void MakeRequests_WithSomeRequests_InncorrectMapping()
         {
             // Arrange
@@ -182,6 +183,20 @@ namespace QueuedRequestsCaller.Tests
             // Assert
             Assert.IsFalse(result.IsSuccessfully);
             Assert.IsNotNull(result.LastException);
+        }
+
+        [TestMethod()]
+        public void MakeRequests_WithSomeRequests_NullInput()
+        {
+            // Arrange
+            QueuedRequestsCallerSettings input = null;
+            QueuedRequestsCallerService caller = new QueuedRequestsCallerService(input);
+
+            // Act
+            var result = caller.MakeRequests();
+
+            // Assert
+            Assert.IsNull(result);
         }
     }
 }

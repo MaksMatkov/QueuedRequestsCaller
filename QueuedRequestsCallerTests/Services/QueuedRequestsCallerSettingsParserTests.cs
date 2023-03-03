@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using QueuedRequestsCaller.Exceptions;
 using QueuedRequestsCaller.Services;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace QueuedRequestsCaller.Services.Tests
             // Assert
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.RequestsList);
-            Assert.AreEqual(result.RequestsList.Count, 2);
+            Assert.AreEqual(3, result.RequestsList.Count);
             //check mapping list
             Assert.AreEqual(result.RequestsList[0].MappingList[0].From.FullName, "value1");
             Assert.AreEqual(result.RequestsList[0].MappingList[0].To.FullName, "value2");
@@ -68,6 +69,28 @@ namespace QueuedRequestsCaller.Services.Tests
             {
                 var result = servise.Parse(json);
             }
+            catch (JsonValidationException ex)
+            {
+                // Assert
+                Assert.IsNotNull(ex, ex.Message);
+                return;
+            }
+
+            Assert.IsTrue(false);
+        }
+
+        [TestMethod()]
+        public void ParseTest_IncorrectJson_ButMissValidation()
+        {
+            // Arrange
+            var json = "{'data' : 'Something'}";
+            var servise = new QueuedRequestsCallerSettingsParser();
+
+            // Act
+            try
+            {
+                var result = servise.Parse(json, false);
+            }
             catch (InvalidCastException ex)
             {
                 // Assert
@@ -76,6 +99,35 @@ namespace QueuedRequestsCaller.Services.Tests
             }
 
             Assert.IsTrue(false);
+        }
+
+        [TestMethod()]
+        public void ValidateJson_Valid()
+        {
+            // Arrange
+            var json = File.ReadAllText("TestJSONData.json");
+            var servise = new QueuedRequestsCallerSettingsParser();
+
+            // Act
+            var result = servise.Validate(json);
+
+            // Assert
+            Assert.IsTrue(result.IsValid);
+        }
+
+        [TestMethod()]
+        public void ValidateJson_Invalid()
+        {
+            // Arrange
+            var json = "{'data' : 'Something'}";
+            var servise = new QueuedRequestsCallerSettingsParser();
+
+            // Act
+            var result = servise.Validate(json);
+
+            // Assert
+            Assert.IsFalse(result.IsValid);
+            Assert.IsTrue(result.Errors.Any());
         }
     }
 }

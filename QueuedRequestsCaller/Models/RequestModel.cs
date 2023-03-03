@@ -30,23 +30,26 @@ namespace QueuedRequestsCaller.Models
             this.RestRequest.Method = method;
 
             var tasksList = new Task[2];
-            tasksList[0] = (Task.Run(() =>
-            {
-                foreach (var h in headerValues)
+            if (headerValues != null)
+                tasksList[0] = (Task.Run(() =>
                 {
-                    this.RestRequest.AddHeader(h.Key, h.Value);
-                }
-            }));
+                    foreach (var h in headerValues)
+                    {
+                        this.RestRequest.AddHeader(h.Key, h.Value);
+                    }
+                }));
 
-            tasksList[1] = (Task.Run(() =>
-            {
-                foreach (var h in queryParameters)
+            if (queryParameters != null)
+                tasksList[1] = (Task.Run(() =>
                 {
-                    this.RestRequest.AddQueryParameter(h.Key, h.Value);
-                }
-            }));
+                    foreach (var h in queryParameters)
+                    {
+                        this.RestRequest.AddQueryParameter(h.Key, h.Value);
+                    }
+                }));
 
-            Task.WaitAll(tasksList);
+            if(tasksList.All(el => el != null))
+                Task.WaitAll(tasksList);
         }
 
         private JObject _RequestBody { get; set; }
