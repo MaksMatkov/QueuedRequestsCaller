@@ -61,13 +61,39 @@ namespace QueuedRequestsCaller
 
                     _callerSettings.RequestsList[i].Model.MakeRequest();
 
-                    if (i + 1 < _callerSettings.RequestsList.Count)
-                    {
-                        newIteration.AddLog(new Log($"Start mapping values to next request, Values Count = [{_callerSettings.RequestsList[i].MappingList.Count}]"));
 
-                        //execute post request actions
-                        for (var j = 0; j < _callerSettings.RequestsList[i].PostRequestActionsList.Count; j++)
-                            _callerSettings.RequestsList[i].PostRequestActionsList[j](_callerSettings.RequestsList[i].Model, _callerSettings.RequestsList[i + 1].Model);
+                    //execute post request actions
+                    if (_callerSettings.RequestsList[i].CallsCount > 1)
+                    {
+                        newIteration.AddLog(new Log($"Start re-execute request with endpoint = [{newIteration.RequestModel.RestRequest.Resource}], CallsCount = [{_callerSettings.RequestsList[i].CallsCount}]"));
+
+                        for (var j = 0; j < _callerSettings.RequestsList[i].CallsCount; j++)
+                        {
+                            try
+                            {
+                                CallPostRequestActions(_callerSettings.RequestsList[i], i + 1 < _callerSettings.RequestsList.Count ? _callerSettings.RequestsList[i + 1] : null);
+                                _callerSettings.RequestsList[i].Model.MakeRequest();
+                            }
+                            catch (Exception ex)
+                            {
+                                newIteration.AddLog(new Log($"Error during re-execute request with endpoint = [{newIteration.RequestModel.RestRequest.Resource}], Time = [{j + 1}]", Enums.RequestLogType.Error, ex));
+                                if (_callerSettings.DropOnReExecuteError)
+                                {
+                                    _requestIteration.Add(newIteration);
+                                    throw new Exception("DropOnReExecuteError", ex);
+                                }
+                                else
+                                    break;
+                            }
+                        }
+
+                        newIteration.AddLog(new Log($"End re-execute request with endpoint = [{newIteration.RequestModel.RestRequest.Resource}]"));
+                    }
+                    else if (i + 1 < _callerSettings.RequestsList.Count)
+                    {
+                        CallPostRequestActions(_callerSettings.RequestsList[i], _callerSettings.RequestsList[i + 1]);
+
+                        newIteration.AddLog(new Log($"Start mapping values to next request, Values Count = [{_callerSettings.RequestsList[i].MappingList.Count}]"));
 
                         _callerSettings.RequestsList[i].MappToNext(_callerSettings.RequestsList[i + 1].Model);
 
@@ -86,6 +112,12 @@ namespace QueuedRequestsCaller
             }
 
             return new RequestsCallerResult(true, _requestIteration);
+        }
+
+        public void CallPostRequestActions(QueuedRequestItem requestItem, QueuedRequestItem nextRequestItem)
+        {
+            for (var j = 0; j < requestItem.PostRequestActionsList.Count; j++)
+                requestItem.PostRequestActionsList[j](requestItem.Model, nextRequestItem != null ? nextRequestItem.Model : null);
         }
     }
 }

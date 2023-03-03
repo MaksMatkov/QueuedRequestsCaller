@@ -11,6 +11,7 @@ namespace QueuedRequestsCaller.Models
     {
         public RequestModel Model { get; set; }
         public List<MapCouple> MappingList { get; set; } = new List<MapCouple>();
+        public int CallsCount { get; set; } = 1;
 
         /// <summary>
         /// Actions that take first argument this request and second parameter as next request

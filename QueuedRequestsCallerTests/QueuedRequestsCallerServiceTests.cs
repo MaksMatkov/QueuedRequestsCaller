@@ -54,7 +54,7 @@ namespace QueuedRequestsCaller.Tests
 
             // Assert
             Assert.IsTrue(result.IsSuccessfully);
-            Assert.AreEqual(1, result.RequestIteration.Count);
+            Assert.AreEqual(1, result.RequestIterationList.Count);
         }
 
         [TestMethod()]
@@ -67,8 +67,9 @@ namespace QueuedRequestsCaller.Tests
             {
                 Model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
                 "https://api.namefake.com/",
+                null,
                 new Dictionary<string, string>() { { "test", "test" }, { "test2", "test2" } },
-                new Dictionary<string, string>() { { "headerTest" , "value"} }, null),
+                new Dictionary<string, string>() { { "headerTest" , "value"} }),
             });
             var settings = new QueuedRequestsCallerSettings
             {
@@ -81,7 +82,7 @@ namespace QueuedRequestsCaller.Tests
 
             // Assert
             Assert.IsTrue(result.IsSuccessfully);
-            Assert.AreEqual(1, result.RequestIteration.Count);
+            Assert.AreEqual(1, result.RequestIterationList.Count);
             Assert.IsTrue(result.Response.Request.Parameters.TryFind("test") != null && (string)result.Response.Request.Parameters.TryFind("test").Value == "test");
             Assert.IsTrue(result.Response.Request.Parameters.TryFind("test2") != null && (string)result.Response.Request.Parameters.TryFind("test2").Value == "test2");
             Assert.IsTrue(result.Response.Request.Parameters.TryFind("headerTest") != null && (string)result.Response.Request.Parameters.TryFind("headerTest").Value == "value");
@@ -133,7 +134,7 @@ namespace QueuedRequestsCaller.Tests
 
             // Assert
             Assert.IsTrue(result.IsSuccessfully);
-            Assert.AreEqual((JObject.Parse(result.RequestIteration[0].RequestModel.RequestResponse.Content) as dynamic).name, (JObject.Parse(result.Response.Content) as dynamic).name);
+            Assert.AreEqual((JObject.Parse(result.RequestIterationList[0].RequestModel.RequestResponse.Content) as dynamic).name, (JObject.Parse(result.Response.Content) as dynamic).name);
         }
 
         [TestMethod()]
@@ -198,5 +199,39 @@ namespace QueuedRequestsCaller.Tests
             // Assert
             Assert.IsNull(result);
         }
+
+        [TestMethod()]
+        public void MakeRequests_CallsCount_Two()
+        {
+            // Arrange
+            var actionCount = 0;
+            Action<RequestModel, RequestModel> increment = (RequestModel c, RequestModel n) => { actionCount++; };
+            QueuedRequestsCallerSettings input = new QueuedRequestsCallerSettings()
+            {
+                DropOnReExecuteError = true,
+                RequestsList = new List<QueuedRequestItem>()
+                {
+                   new QueuedRequestItem()
+                   {
+                        CallsCount = 3,
+                        PostRequestActionsList = new List<Action<RequestModel, RequestModel>>()
+                        {
+                            increment
+                        },
+                        Model = new RequestModel(RestSharp.Method.Get, "https://cataas.com/cat?json=true", null)
+                   }
+                }
+
+            };
+            QueuedRequestsCallerService caller = new QueuedRequestsCallerService(input);
+
+            // Act
+            var result = caller.MakeRequests();
+
+            // Assert
+            Assert.IsTrue(result.IsSuccessfully);
+            Assert.AreEqual(3, actionCount);
+        }
+
     }
 }

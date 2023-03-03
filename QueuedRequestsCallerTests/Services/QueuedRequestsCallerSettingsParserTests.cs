@@ -14,7 +14,7 @@ namespace QueuedRequestsCaller.Services.Tests
     public class QueuedRequestsCallerSettingsParserTests
     {
         [TestMethod()]
-        public void ParseTest_AllDataCorrect1()
+        public void ParseTest_AllDataCorrect()
         {
             // Arrange
             var json = File.ReadAllText("TestJSONData.json");
@@ -28,6 +28,8 @@ namespace QueuedRequestsCaller.Services.Tests
             Assert.IsNotNull(result.RequestsList);
             Assert.AreEqual(3, result.RequestsList.Count);
             //check mapping list
+            Assert.AreEqual(3, result.RequestsList[0].CallsCount);
+            Assert.AreEqual(1, result.RequestsList[1].CallsCount);
             Assert.AreEqual(result.RequestsList[0].MappingList[0].From.FullName, "value1");
             Assert.AreEqual(result.RequestsList[0].MappingList[0].To.FullName, "value2");
             Assert.AreEqual(result.RequestsList[1].MappingList[0].From.FullName, "value1");

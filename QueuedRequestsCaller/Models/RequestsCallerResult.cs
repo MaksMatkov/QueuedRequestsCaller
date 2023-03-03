@@ -9,23 +9,23 @@ namespace QueuedRequestsCaller.Models
 {
     public class RequestsCallerResult : IDisposable
     {
-        public RequestsCallerResult(bool isSuccessfully, List<RequestIteration> requestIteration, Exception lastException = null)
+        public RequestsCallerResult(bool isSuccessfully, List<RequestIteration> requestIterationList, Exception lastException = null)
         {
             IsSuccessfully = isSuccessfully;
             LastException = lastException;
-            RequestIteration = requestIteration;
+            RequestIterationList = requestIterationList;
         }
 
         public bool IsSuccessfully { get; private set; }
         public Exception LastException { get; private set; }
-        public List<RequestIteration> RequestIteration { get; private set; }
+        public List<RequestIteration> RequestIterationList { get; private set; }
 
         public RestResponse Response
         {
             get
             {
-                if (RequestIteration.Count > 0)
-                    return RequestIteration.Last().RequestModel.RequestResponse;
+                if (RequestIterationList.Count > 0)
+                    return RequestIterationList.Last().RequestModel.RequestResponse;
                 else
                     return null;
             }
@@ -33,7 +33,7 @@ namespace QueuedRequestsCaller.Models
 
         public void Dispose()
         {
-            RequestIteration.Clear();
+            RequestIterationList.Clear();
         }
 
         ~RequestsCallerResult()
