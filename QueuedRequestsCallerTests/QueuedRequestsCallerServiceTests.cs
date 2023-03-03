@@ -135,5 +135,53 @@ namespace QueuedRequestsCaller.Tests
             Assert.IsTrue(result.IsSuccessfully);
             Assert.AreEqual((JObject.Parse(result.RequestIteration[0].RequestModel.RequestResponse.Content) as dynamic).name, (JObject.Parse(result.Response.Content) as dynamic).name);
         }
+
+        public void MakeRequests_WithSomeRequests_InncorrectMapping()
+        {
+            // Arrange
+            var callsList = new System.Collections.Generic.List<QueuedRequestsCaller.Models.QueuedRequestItem>();
+
+            callsList.Add(new QueuedRequestsCaller.Models.QueuedRequestItem()
+            {
+                Model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
+                "https://api.namefake.com/",
+                new Dictionary<string, string>(),
+                new Dictionary<string, string>(), null),
+
+                MappingList = new List<QueuedRequestsCaller.Models.MapCouple>()
+                {
+                    new MapCouple()
+                    {
+                        From = new RequestValue()
+                        {
+                            FullName = "nameInncorrect",
+                            Location = QueuedRequestsCaller.Enums.MappingValueLocation.Body
+                        },
+                        To = new RequestValue()
+                        {
+                            FullName = "name",
+                            Location = QueuedRequestsCaller.Enums.MappingValueLocation.QueryParam
+                        }
+                    }
+                }
+            });
+
+            callsList.Add(new QueuedRequestsCaller.Models.QueuedRequestItem()
+            {
+                Model = new QueuedRequestsCaller.Models.RequestModel(RestSharp.Method.Get,
+               "https://api.nationalize.io/",
+               new Dictionary<string, string>(),
+               new Dictionary<string, string>(), null)
+            });
+
+            QueuedRequestsCallerService caller = new QueuedRequestsCallerService(new QueuedRequestsCallerSettings() { RequestsList = callsList });
+
+            // Act
+            var result = caller.MakeRequests();
+
+            // Assert
+            Assert.IsFalse(result.IsSuccessfully);
+            Assert.IsNotNull(result.LastException);
+        }
     }
 }

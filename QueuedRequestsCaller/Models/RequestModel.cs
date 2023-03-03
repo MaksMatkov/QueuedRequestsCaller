@@ -10,21 +10,21 @@ namespace QueuedRequestsCaller.Models
 {
     public class RequestModel
     {
-        public RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, JObject body)
-            : this(method, resource, queryParameters, headers)
+        public RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headerValues, string body)
+            : this(method, resource, queryParameters, headerValues)
         {
             if (body != null)
-                this.RequestBody = body;
+                this.RequestBody = JObject.Parse(body);
         }
 
-        public RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, object body)
-            : this(method, resource, queryParameters, headers)
+        public RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headerValues, object body)
+            : this(method, resource, queryParameters, headerValues)
         {
             if (body != null)
                 this.RequestBody = JObject.FromObject(body);
         }
 
-        private RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headers)
+        private RequestModel(RestSharp.Method method, string resource, Dictionary<string, string> queryParameters, Dictionary<string, string> headerValues)
         {
             this.RestRequest.Resource = resource;
             this.RestRequest.Method = method;
@@ -32,7 +32,7 @@ namespace QueuedRequestsCaller.Models
             var tasksList = new Task[2];
             tasksList[0] = (Task.Run(() =>
             {
-                foreach (var h in headers)
+                foreach (var h in headerValues)
                 {
                     this.RestRequest.AddHeader(h.Key, h.Value);
                 }

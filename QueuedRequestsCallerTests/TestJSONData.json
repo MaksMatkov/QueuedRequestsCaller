@@ -1,0 +1,76 @@
+{
+  "RequestsList": [
+    {
+      "Model": {
+        "Method": 0,
+        "Resourse": "https://www.google.com/",
+        "QueryParameters": [
+          {
+            "value": 1
+          },
+          {
+            "value1": 2
+          }
+        ],
+        "HeaderValues": [
+          {
+            "value": 1
+          },
+          {
+            "value1": 2
+          }
+        ],
+        "Body": {
+          
+        }
+      },
+      "MappingList": [
+        {
+          "From": {
+            "Location": "1",
+            "FullName": "value1"
+          },
+          "To": {
+            "Location": "2",
+            "FullName": "value2"
+          }
+        }
+      ]
+    },
+    {
+      "Model": {
+        "Method": 2,
+        "Resourse": "https://www.google.com/",
+        "QueryParameters": [
+        ],
+        "HeaderValues": [
+          {
+            "value": 1
+          },
+          {
+            "value1": 2
+          }
+        ],
+        "Body": {
+          "name": "Tom",
+          "addres": {
+            "number": 2,
+            "addressName": "AddressName"
+          }
+        }
+      },
+      "MappingList": [
+        {
+          "From": {
+            "Location": "1",
+            "FullName": "value1"
+          },
+          "To": {
+            "Location": "2",
+            "FullName": "value2"
+          }
+        }
+      ]
+    }
+  ]
+}
