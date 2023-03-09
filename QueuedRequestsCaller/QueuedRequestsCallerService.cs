@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using QueuedRequestsCaller.Services;
 using System.Linq;
 using QueuedRequestsCaller.Infrastructure;
+using QueuedRequestsCaller.Exceptions;
 
 namespace QueuedRequestsCaller
 {
@@ -60,6 +61,10 @@ namespace QueuedRequestsCaller
                     newIteration.AddLog(new Log($"Start execute request with endpoint = [{newIteration.RequestModel.RestRequest.Resource}]"));
 
                     _callerSettings.RequestsList[i].Model.MakeRequest();
+
+                    if (_callerSettings.RequestsList[i].ExpectedStatusesList.Length > 0
+                        && !_callerSettings.RequestsList[i].ExpectedStatusesList.Contains((int)_callerSettings.RequestsList[i].Model.RequestResponse.StatusCode))
+                        throw new NotMatchStatusException("Not Match Status", (int)_callerSettings.RequestsList[i].Model.RequestResponse.StatusCode);
 
 
                     //execute post request actions
