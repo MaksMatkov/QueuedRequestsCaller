@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using QueuedRequestsCaller.Models;
 using System;
 using System.Collections.Generic;
@@ -65,6 +65,7 @@ namespace QueuedRequestsCaller
                     if (_callerSettings.RequestsList[i].ExpectedStatusesList?.Length > 0
                         && !_callerSettings.RequestsList[i].ExpectedStatusesList.Contains((int)_callerSettings.RequestsList[i].Model.RequestResponse.StatusCode))
                         throw new NotMatchStatusException("Not Match Status", (int)_callerSettings.RequestsList[i].Model.RequestResponse.StatusCode);
+
 
                     //execute post request actions
                     if (_callerSettings.RequestsList[i].CallsCount > 1)
